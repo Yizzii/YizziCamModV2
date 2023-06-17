@@ -1,6 +1,6 @@
 # YizziCamModV2
 
-Camera Mod with in game UI
+First Camera Mod with in game UI! (that i know of)
 
 ### Features:
 * First Person View with smoothing
