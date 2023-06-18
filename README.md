@@ -4,7 +4,7 @@ First Camera Mod with in game UI! (that i know of)
 
 ### Features:
 * First Person View with smoothing
-* Follow Player(Camera will look at and follow player, misc page for settings)
+* Follow Player(Camera will look at and follow player, misc page for settings, minimum distance and speed)
 * Grabbable Handles 
 * Green Screen(in city)
 * Adjustable FOV and Nearclip
