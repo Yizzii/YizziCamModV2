@@ -37,7 +37,7 @@ namespace YizziCamModV2.Comps
             }
             if (Main.fpv)
             {
-                if (Input.LeftStick && Input.LeftStick)
+                if (Input.LeftStick)
                 {
                     Main.fpv = false;
                     foreach (GameObject btns in Main.Buttons)

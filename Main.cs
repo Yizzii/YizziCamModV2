@@ -150,6 +150,10 @@ namespace YizziCamModV2
                     CameraTablet.transform.SetParent(CameraFollower.transform);
                 }
             }
+            else if(Input.RightStick && CameraTablet.transform.parent == null)
+            {
+                CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+            }
             if (fp)
             {
                 CameraTablet.transform.LookAt(CameraFollower.transform.position);
