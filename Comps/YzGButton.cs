@@ -39,6 +39,7 @@ namespace YizziCamModV2.Comps
                             Main.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
                             Main.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                         }
+                        Main.fp = false;
                         Main.fpv = true;
                         break;
                     case "FlipCamButton":
