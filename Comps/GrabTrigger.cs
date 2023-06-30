@@ -7,13 +7,13 @@ namespace YizziCamModV2.Comps
 {
     class GrabTrigger : MonoBehaviour
     {
-        InputManager Input;
-        Main Main;
+        public InputManager Input;
+        public CameraController Main;
         void Start()
         {
             gameObject.layer = 18;
             Input = GameObject.FindObjectOfType<InputManager>().GetComponent<InputManager>();
-            Main = GameObject.FindObjectOfType<Main>().GetComponent<Main>();
+            Main = GameObject.FindObjectOfType<CameraController>().GetComponent<CameraController>();
         }
 
         void OnTriggerStay(Collider col)

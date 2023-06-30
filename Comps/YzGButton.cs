@@ -3,11 +3,11 @@ namespace YizziCamModV2.Comps
 {
     class YzGButton : MonoBehaviour
     {
-        public Main Main;
+        public CameraController Main;
         void Start()
         {
             this.gameObject.layer = 18;
-            Main = GameObject.FindObjectOfType<Main>().GetComponent<Main>();
+            Main = GameObject.FindObjectOfType<CameraController>().GetComponent<CameraController>();
         }
         void OnEnable(){Invoke("ButtonTimer", 1f);}
         void OnDisable(){ Main.canbeused = false;}
