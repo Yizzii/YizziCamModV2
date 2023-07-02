@@ -14,7 +14,7 @@ First Camera Mod with in game UI! (that i know of)
 * Adjustable FOV and Nearclip
 
 ### Controls:
-* disable first person view putting your left hand over your shoulder and click left analog stick down
+* disable first person view by putting your left hand over your shoulder and click left analog stick down
 * right stick down to teleport camera in front of you
 * hold grip on banana handle to grab camera
  
