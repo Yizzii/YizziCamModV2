@@ -1,14 +1,11 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Reflection;
-using BepInEx;
 using Cinemachine;
 using GorillaLocomotion;
 using UnityEngine;
 using UnityEngine.UI;
-using Utilla;
 using YizziCamModV2.Comps;
-
+#pragma warning disable CS0618
 namespace YizziCamModV2
 {
     public class CameraController : MonoBehaviour
@@ -31,6 +28,7 @@ namespace YizziCamModV2
         public FastList<GameObject> Buttons = new FastList<GameObject>();
         public FastList<GameObject> ColorButtons = new FastList<GameObject>();
         public FastList<Material> ScreenMats = new FastList<Material>();
+        public FastList<MeshRenderer> meshRenderers = new FastList<MeshRenderer>();
 
         public Camera TabletCamera;
         public Camera FirstPersonCamera;
@@ -42,14 +40,19 @@ namespace YizziCamModV2
         public Text ColorScreenText;
         public Text MinDistText;
         public Text SpeedText;
+        public Text SmoothText;
 
         public bool canbeused;
         public bool flipped;
+        public bool tpv;
         public bool fpv;
         public bool fp;
+        public bool openedurl;
         public float minDist = 2f;
         float dist;
         public float fpspeed = 0.01f;
+        public float smoothing = 0.05f;
+        Vector3 velocity = Vector3.zero;
 
         InputManager Input;
         void Start()
@@ -74,23 +77,27 @@ namespace YizziCamModV2
             FakeWebCam = GameObject.Find("CameraTablet(Clone)/FakeCamera");
             LeftGrabCol = GameObject.Find("CameraTablet(Clone)/LeftGrabCol");
             RightGrabCol = GameObject.Find("CameraTablet(Clone)/RightGrabCol");
-            LeftGrabCol.AddComponent<GrabTrigger>();
-            RightGrabCol.AddComponent<GrabTrigger>();
+            LeftGrabCol.AddComponent<LeftGrabTrigger>();
+            RightGrabCol.AddComponent<RightGrabTrigger>();
             MainPage = GameObject.Find("CameraTablet(Clone)/MainPage");
             MiscPage = GameObject.Find("CameraTablet(Clone)/MiscPage");
-            FovText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/FovText").GetComponent<Text>();
-            MinDistText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas (1)/MinDistText").GetComponent<Text>();
-            SpeedText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas (1)/SpeedText").GetComponent<Text>();
-            NearClipText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/NearClipText").GetComponent<Text>();
+            FovText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/FovValueText").GetComponent<Text>();
+            SmoothText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/SmoothingValueText").GetComponent<Text>();
+            NearClipText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/NearClipValueText").GetComponent<Text>();
+            MinDistText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/MinDistValueText").GetComponent<Text>();
+            SpeedText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/SpeedValueText").GetComponent<Text>();
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/MiscButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FPVButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FovUP"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FovDown"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FlipCamButton"));
-            Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FlipCamButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/NearClipUp"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/NearClipDown"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/FPButton"));
+            Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/ControlsButton"));
+            Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/TPVButton"));
+            Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/SmoothingDownButton"));
+            Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MainPage/SmoothingUpButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MiscPage/BackButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MiscPage/GreenScreenButton"));
             Buttons.AddUnique(GameObject.Find("CameraTablet(Clone)/MiscPage/MinDistDownButton"));
@@ -108,7 +115,7 @@ namespace YizziCamModV2
             ThirdPersonCameraGO.transform.position = TabletCamera.transform.position;
             ThirdPersonCameraGO.transform.rotation = TabletCamera.transform.rotation;
             CameraTablet.transform.Rotate(0, 180, 0);
-            ColorScreenText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas (1)/ColorScreenText").GetComponent<Text>();
+            ColorScreenText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/ColorScreenText").GetComponent<Text>();
             ColorButtons.AddUnique(GameObject.Find("ColorScreen(Clone)/Stuff/RedButton"));
             ColorButtons.AddUnique(GameObject.Find("ColorScreen(Clone)/Stuff/GreenButton"));
             ColorButtons.AddUnique(GameObject.Find("ColorScreen(Clone)/Stuff/BlueButton"));
@@ -120,36 +127,40 @@ namespace YizziCamModV2
             ScreenMats.AddUnique(GameObject.Find("ColorScreen(Clone)/Screen1").GetComponent<MeshRenderer>().material);
             ScreenMats.AddUnique(GameObject.Find("ColorScreen(Clone)/Screen2").GetComponent<MeshRenderer>().material);
             ScreenMats.AddUnique(GameObject.Find("ColorScreen(Clone)/Screen3").GetComponent<MeshRenderer>().material);
+            meshRenderers.AddUnique(GameObject.Find("CameraTablet(Clone)/FakeCamera").GetComponent<MeshRenderer>());
+            meshRenderers.AddUnique(GameObject.Find("CameraTablet(Clone)/Tablet").GetComponent<MeshRenderer>());
+            meshRenderers.AddUnique(GameObject.Find("CameraTablet(Clone)/Handle").GetComponent<MeshRenderer>());
+            meshRenderers.AddUnique(GameObject.Find("CameraTablet(Clone)/Handle2").GetComponent<MeshRenderer>());
             ColorScreenGO.transform.position = new Vector3(-54.3f, 16.21f, -122.96f);
             ColorScreenGO.transform.Rotate(0, 30, 0);
             ColorScreenGO.SetActive(false);
             MiscPage.SetActive(false);
+            ThirdPersonCamera.nearClipPlane = 0.1f;
+            TabletCamera.nearClipPlane = 0.1f;
+            FakeWebCam.transform.Rotate(-180,180,0);
         }
-        void FixedUpdate()
+        void LateUpdate()
         {
             if (fpv)
             {
-                if (CameraTablet.transform.parent == null)
+                if (MainPage.active)
                 {
-                    foreach (GameObject btns in Buttons)
+                    foreach (MeshRenderer mr in meshRenderers)
                     {
-                        btns.SetActive(false);
+                        mr.enabled = false;
                     }
-                    CameraTablet.transform.position = CameraFollower.transform.position;
-                    CameraTablet.transform.rotation = Player.Instance.headCollider.transform.rotation;
-                    CameraTablet.transform.Rotate(0f, -180f, 0f);
-                    TabletCamera.nearClipPlane = 0.1f;
-                    ThirdPersonCamera.nearClipPlane = 0.1f;
-                    CameraTablet.transform.SetParent(CameraFollower.transform);
+                    MainPage.active = false;
                 }
+                CameraTablet.transform.position = CameraFollower.transform.position;
+                CameraTablet.transform.rotation = Quaternion.Lerp(CameraTablet.transform.rotation, CameraFollower.transform.rotation, smoothing);
             }
-            else if (Input.RightStick && CameraTablet.transform.parent == null)
+            else if (Input.LeftPrimaryButton &&!tpv&& !fp &&CameraTablet.transform.parent == null)
             {
                 CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
             }
             if (fp)
             {
-                CameraTablet.transform.LookAt(CameraFollower.transform.position);
+                CameraTablet.transform.LookAt(2f * CameraTablet.transform.position - CameraFollower.transform.position);
                 if (!flipped)
                 {
                     flipped = true;
@@ -161,6 +172,17 @@ namespace YizziCamModV2
                 if (dist > minDist)
                 {
                     CameraTablet.transform.position = Vector3.Lerp(CameraTablet.transform.position, CameraFollower.transform.position, fpspeed);
+                }
+            }
+            if (tpv)
+            {
+                Vector3 targetPosition = CameraFollower.transform.TransformPoint(new Vector3(0.3f, 0, -1.5f));
+                CameraTablet.transform.position = Vector3.SmoothDamp(CameraTablet.transform.position,targetPosition, ref velocity, 0.1f);
+                CameraTablet.transform.rotation = Quaternion.Lerp(CameraTablet.transform.rotation,CameraFollower.transform.rotation,0.1f);
+                if (Input.LeftPrimaryButton)
+                {
+                    CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    tpv = false;
                 }
             }
         }

@@ -1,5 +1,5 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.XR;
 
 namespace YizziCamModV2.Comps
@@ -14,15 +14,25 @@ namespace YizziCamModV2.Comps
         public bool RightTrigger;
         public bool LeftStick;
         public bool RightStick;
+        public bool LeftPrimaryButton; // x
+        // gamepad
+        public Vector2 GPLeftStick;
+        public Vector2 GPRightStick;
 
         void Update()
         {
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(CommonUsages.gripButton, out LeftGrip);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(CommonUsages.gripButton, out RightGrip);
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(CommonUsages.triggerButton, out LeftTrigger);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(CommonUsages.triggerButton, out RightTrigger);
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out LeftStick);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(CommonUsages.primary2DAxisClick, out RightStick);
+            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out LeftGrip);
+            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out RightGrip);
+            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out LeftTrigger);
+            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out RightTrigger);
+            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out LeftStick);
+            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out RightStick);
+            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out LeftPrimaryButton);
+            if (Gamepad.current != null)
+            {
+                GPLeftStick = Gamepad.current.leftStick.ReadValue();
+                GPRightStick = Gamepad.current.rightStick.ReadValue();
+            }
         }
     }
 }

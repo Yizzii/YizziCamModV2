@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+#pragma warning disable CS0618
 namespace YizziCamModV2.Comps
 {
     class YzGButton : MonoBehaviour
@@ -30,6 +31,43 @@ namespace YizziCamModV2.Comps
                     case "BackButton":
                         Main.MainPage.SetActive(true);
                         Main.MiscPage.SetActive(false);
+                        break;
+                    case "ControlsButton":
+                        if (!Main.openedurl)
+                        {
+                            Application.OpenURL("https://github.com/Yizzii/YizziCamModV2#controls");
+                            Main.openedurl = true;
+                        }
+                        break;
+                    case "SmoothingDownButton":
+                        Main.smoothing -= 0.01f;
+                        if (Main.smoothing < 0.05f)
+                        {
+                            Main.smoothing = 0.11f;
+                        }
+                        Main.SmoothText.text = Main.smoothing.ToString();
+                        Main.canbeused = true;
+                        break;
+                    case "SmoothingUpButton":
+                        Main.smoothing += 0.01f;
+                        if (Main.smoothing > 0.11f)
+                        {
+                            Main.smoothing = 0.05f;
+                        }
+                        Main.SmoothText.text = Main.smoothing.ToString();
+                        Main.canbeused = true;
+                        break;
+                    case "TPVButton":
+                        if (Main.flipped)
+                        {
+                            Main.flipped = false;
+                            Main.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            Main.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            Main.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                        }
+                        Main.fp = false;
+                        Main.fpv = false;
+                        Main.tpv = true;
                         break;
                     case "FPVButton":
                         if (Main.flipped)
