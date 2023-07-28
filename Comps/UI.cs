@@ -40,20 +40,20 @@ namespace YizziCamModV2.Comps
         Vector3 velocity = Vector3.zero;
         void Start ()
         {
-            rigcache = GameObject.Find("Global/RigCache/Rig Parent");
+            rigcache = GameObject.Find("Player Objects/RigCache/Rig Parent");
             Main = GameObject.FindObjectOfType<CameraController>().GetComponent<CameraController>();
             Input = GameObject.FindObjectOfType<InputManager>().GetComponent<InputManager>();
-            forest = GameObject.Find("Level/forest");
-            city = GameObject.Find("Level/city");
-            canyon = GameObject.Find("Level/canyon");
-            cave = GameObject.Find("Level/cave");
-            mountain = GameObject.Find("Level/mountain");
-            clouds = GameObject.Find("Level/skyjungle");
-            cloudsbottom = GameObject.Find("Level/Sky Jungle Bottom (1)/CloudSmall (22)");
-            beach = GameObject.Find("Level/beach");
-            beachthing = GameObject.Find("Level/ForestToBeach_Prefab_V4");
-            basement = GameObject.Find("Level/city/DungeonRoomAnchor");
-            citybuildings = GameObject.Find("Level/city/CosmeticsRoomAnchor/rain");
+            forest = GameObject.Find("Environment Objects/LocalObjects_Prefab/Forest");
+            city = GameObject.Find("Environment Objects/LocalObjects_Prefab/City");
+            canyon = GameObject.Find("Environment Objects/LocalObjects_Prefab/Canyon");
+            cave = GameObject.Find("Environment Objects/LocalObjects_Prefab/Cave_Main_Prefab");
+            mountain = GameObject.Find("Environment Objects/LocalObjects_Prefab/Mountain");
+            clouds = GameObject.Find("Environment Objects/LocalObjects_Prefab/skyjungle");
+            cloudsbottom = GameObject.Find("Environment Objects/LocalObjects_Prefab/Forest/Sky Jungle Bottom (1)/CloudSmall (22)");
+            beach = GameObject.Find("Environment Objects/LocalObjects_Prefab/Beach");
+            beachthing = GameObject.Find("Environment Objects/LocalObjects_Prefab/ForestToBeach");
+            basement = GameObject.Find("Environment Objects/LocalObjects_Prefab/Basement");
+            citybuildings = GameObject.Find("Environment Objects/LocalObjects_Prefab/City/CosmeticsRoomAnchor/rain");
         }
         void OnGUI()
         {
@@ -105,7 +105,7 @@ namespace YizziCamModV2.Comps
                         spectating = false;
                     }
                 }
-                if (GUI.Button(new Rect(35f, 110f, 160f, 20f), "Load All Maps(privs)"))
+                if (GUI.Button(new Rect(35f, 110f, 160f, 20f), "Load All Maps"))
                 {
                     if (!PhotonNetwork.CurrentRoom.IsVisible)
                     {
@@ -161,7 +161,7 @@ namespace YizziCamModV2.Comps
 
                 GUI.Label(new Rect(35f, 232f, 160f, 30f), "          Freecam Speed");
                 freecamspeed = GUI.HorizontalSlider(new Rect(35f, 250f, 160f, 5f), freecamspeed, 0.01f, 0.4f);
-                GUI.Label(new Rect(35f, 258f, 160f, 20f), "1                0.5               1");
+                GUI.Label(new Rect(35f, 258f, 160f, 20f), "0                0.5               1");
                 GUI.Label(new Rect(35f, 275f, 160f, 30f), "          Freecam Sens");
                 freecamsens = GUI.HorizontalSlider(new Rect(35f, 293f, 160f, 5f), freecamsens, 0.01f, 2f);
                 GUI.Label(new Rect(35f, 301f, 160f, 20f), "0                0.5               1");
