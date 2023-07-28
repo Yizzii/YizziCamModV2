@@ -63,15 +63,15 @@ namespace YizziCamModV2
             CameraTablet = LoadBundle("CameraTablet", "YizziCamModV2.Assets.yizzicamera");
             CamFollower = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/Main Camera/Camera Follower");
             FirstPersonCameraGO = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/Main Camera");
-            ThirdPersonCameraGO = GameObject.Find("Global/Third Person Camera/Shoulder Camera");
-            CMVirtualCameraGO = GameObject.Find("Global/Third Person Camera/Shoulder Camera/CM vcam1");
-            FirstPersonCamera = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/Main Camera").GetComponent<Camera>();
-            ThirdPersonCamera = GameObject.Find("Global/Third Person Camera/Shoulder Camera").GetComponent<Camera>();
+            ThirdPersonCameraGO = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera");
+            CMVirtualCameraGO = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera/CM vcam1");
+            FirstPersonCamera = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/Main Camera").GetComponent<Camera>();
+            ThirdPersonCamera = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera").GetComponent<Camera>();
             CMVirtualCamera = CMVirtualCameraGO.GetComponent<CinemachineVirtualCamera>();
-            LeftHandGO = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/LeftHand Controller");
-            RightHandGO = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/RightHand Controller");
+            LeftHandGO = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/LeftHand Controller");
+            RightHandGO = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/RightHand Controller");
             CameraTablet.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            CameraFollower = GameObject.Find("Player VR Controller/GorillaPlayer/TurnParent/Main Camera/Camera Follower");
+            CameraFollower = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/Main Camera/Camera Follower");
             TabletCameraGO = GameObject.Find("CameraTablet(Clone)/Camera");
             TabletCamera = TabletCameraGO.GetComponent<Camera>();
             FakeWebCam = GameObject.Find("CameraTablet(Clone)/FakeCamera");
@@ -154,8 +154,24 @@ namespace YizziCamModV2
                 CameraTablet.transform.position = CameraFollower.transform.position;
                 CameraTablet.transform.rotation = Quaternion.Lerp(CameraTablet.transform.rotation, CameraFollower.transform.rotation, smoothing);
             }
-            else if (Input.LeftPrimaryButton &&!tpv&& !fp &&CameraTablet.transform.parent == null)
+            if (Input.LeftPrimaryButton&&CameraTablet.transform.parent == null)
             {
+                fp = false;
+                fpv = false;
+                tpv = false;
+                if (!MainPage.active)
+                {
+                    foreach (GameObject btns in Buttons)
+                    {
+                        btns.SetActive(true);
+                    }
+                    foreach (MeshRenderer mr in meshRenderers)
+                    {
+                        mr.enabled = true;
+                        CameraTablet.transform.Rotate(0f, -180f, 0f);
+                    }
+                    MainPage.active = true;
+                }
                 CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
             }
             if (fp)
