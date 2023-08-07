@@ -4,8 +4,9 @@ using UnityEngine.XR;
 
 namespace YizziCamModV2.Comps
 {
-    class InputManager : MonoBehaviour
+    public class InputManager : MonoBehaviour
     {
+        public static InputManager instance;
         private XRNode lHandNode = XRNode.LeftHand;
         private XRNode rHandNode = XRNode.RightHand;
         public bool LeftGrip;
@@ -19,6 +20,10 @@ namespace YizziCamModV2.Comps
         public Vector2 GPLeftStick;
         public Vector2 GPRightStick;
 
+        void Start()
+        {
+            instance = this;
+        }
         void Update()
         {
             InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out LeftGrip);

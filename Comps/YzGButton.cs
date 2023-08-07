@@ -4,200 +4,241 @@ namespace YizziCamModV2.Comps
 {
     class YzGButton : MonoBehaviour
     {
-        public CameraController Main;
         void Start()
         {
             this.gameObject.layer = 18;
-            Main = GameObject.FindObjectOfType<CameraController>().GetComponent<CameraController>();
         }
-        void OnEnable(){Invoke("ButtonTimer", 1f);}
-        void OnDisable(){ Main.canbeused = false;}
+        void OnEnable() { Invoke("ButtonTimer", 1f); }
+        void OnDisable() { Main.Instance.canbeused = false; }
         void ButtonTimer()
         {
             if (!this.enabled)
             {
-                Main.canbeused = false;
+                Main.Instance.canbeused = false;
             }
-            Main.canbeused = true;
+            Main.Instance.canbeused = true;
         }
         void OnTriggerEnter(Collider col)
         {
-            if (Main.canbeused && col.name == "RightHandTriggerCollider" | col.name == "LeftHandTriggerCollider")
+            if (Main.Instance.canbeused && col.name == "RightHandTriggerCollider" | col.name == "LeftHandTriggerCollider")
             {
-                Main.canbeused = false;
+                Main.Instance.canbeused = false;
                 Invoke("ButtonTimer", 1f);
                 switch (this.name)
                 {
                     case "BackButton":
-                        Main.MainPage.SetActive(true);
-                        Main.MiscPage.SetActive(false);
+                        Main.Instance.MainPage.SetActive(true);
+                        Main.Instance.MiscPage.SetActive(false);
                         break;
                     case "ControlsButton":
-                        if (!Main.openedurl)
+                        if (!Main.Instance.openedurl)
                         {
                             Application.OpenURL("https://github.com/Yizzii/YizziCamModV2#controls");
-                            Main.openedurl = true;
+                            Main.Instance.openedurl = true;
                         }
                         break;
                     case "SmoothingDownButton":
-                        Main.smoothing -= 0.01f;
-                        if (Main.smoothing < 0.05f)
+                        Main.Instance.smoothing -= 0.01f;
+                        if (Main.Instance.smoothing < 0.05f)
                         {
-                            Main.smoothing = 0.11f;
+                            Main.Instance.smoothing = 0.11f;
                         }
-                        Main.SmoothText.text = Main.smoothing.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.SmoothText.text = Main.Instance.smoothing.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "SmoothingUpButton":
-                        Main.smoothing += 0.01f;
-                        if (Main.smoothing > 0.11f)
+                        Main.Instance.smoothing += 0.01f;
+                        if (Main.Instance.smoothing > 0.11f)
                         {
-                            Main.smoothing = 0.05f;
+                            Main.Instance.smoothing = 0.05f;
                         }
-                        Main.SmoothText.text = Main.smoothing.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.SmoothText.text = Main.Instance.smoothing.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "TPVButton":
-                        if (Main.flipped)
+                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
                         {
-                            Main.flipped = false;
-                            Main.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                            if (Main.Instance.flipped)
+                            {
+                                Main.Instance.flipped = false;
+                                Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                            }
                         }
-                        Main.fp = false;
-                        Main.fpv = false;
-                        Main.tpv = true;
+                        else if (Main.Instance.TPVMode == Main.TPVModes.FRONT)
+                        {
+                            if (!Main.Instance.flipped)
+                            {
+                                Main.Instance.flipped = true;
+                                Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                            }
+                        }
+                        Main.Instance.fp = false;
+                        Main.Instance.fpv = false;
+                        Main.Instance.tpv = true;
                         break;
                     case "FPVButton":
-                        if (Main.flipped)
+                        if (Main.Instance.flipped)
                         {
-                            Main.flipped = false;
-                            Main.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                            Main.Instance.flipped = false;
+                            Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                         }
-                        Main.fp = false;
-                        Main.fpv = true;
+                        Main.Instance.fp = false;
+                        Main.Instance.fpv = true;
                         break;
                     case "FlipCamButton":
-                        Main.flipped = !Main.flipped;
-                        Main.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                        Main.Instance.flipped = !Main.Instance.flipped;
+                        Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                         break;
                     case "FovDown":
-                        Main.TabletCamera.fieldOfView -= 5f;
-                        if (Main.TabletCamera.fieldOfView < 20)
+                        Main.Instance.TabletCamera.fieldOfView -= 5f;
+                        if (Main.Instance.TabletCamera.fieldOfView < 20)
                         {
-                            Main.TabletCamera.fieldOfView = 130f;
-                            Main.ThirdPersonCamera.fieldOfView = 130f;
+                            Main.Instance.TabletCamera.fieldOfView = 130f;
+                            Main.Instance.ThirdPersonCamera.fieldOfView = 130f;
                         }
-                        Main.ThirdPersonCamera.fieldOfView = Main.TabletCamera.fieldOfView;
-                        Main.FovText.text = Main.TabletCamera.fieldOfView.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.ThirdPersonCamera.fieldOfView = Main.Instance.TabletCamera.fieldOfView;
+                        Main.Instance.FovText.text = Main.Instance.TabletCamera.fieldOfView.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "FovUP":
-                        Main.TabletCamera.fieldOfView += 5f;
-                        if (Main.TabletCamera.fieldOfView > 130)
+                        Main.Instance.TabletCamera.fieldOfView += 5f;
+                        if (Main.Instance.TabletCamera.fieldOfView > 130)
                         {
-                            Main.TabletCamera.fieldOfView = 20f;
-                            Main.ThirdPersonCamera.fieldOfView = 20f;
+                            Main.Instance.TabletCamera.fieldOfView = 20f;
+                            Main.Instance.ThirdPersonCamera.fieldOfView = 20f;
                         }
-                        Main.ThirdPersonCamera.fieldOfView = Main.TabletCamera.fieldOfView;
-                        Main.FovText.text = Main.TabletCamera.fieldOfView.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.ThirdPersonCamera.fieldOfView = Main.Instance.TabletCamera.fieldOfView;
+                        Main.Instance.FovText.text = Main.Instance.TabletCamera.fieldOfView.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "MiscButton":
-                        Main.MainPage.SetActive(false);
-                        Main.MiscPage.SetActive(true);
+                        Main.Instance.MainPage.SetActive(false);
+                        Main.Instance.MiscPage.SetActive(true);
                         break;
                     case "NearClipDown":
-                        Main.TabletCamera.nearClipPlane -= 0.01f;
-                        if (Main.TabletCamera.nearClipPlane < 0.01)
+                        Main.Instance.TabletCamera.nearClipPlane -= 0.01f;
+                        if (Main.Instance.TabletCamera.nearClipPlane < 0.01)
                         {
-                            Main.TabletCamera.nearClipPlane = 1f;
-                            Main.ThirdPersonCamera.nearClipPlane = 1f;
+                            Main.Instance.TabletCamera.nearClipPlane = 1f;
+                            Main.Instance.ThirdPersonCamera.nearClipPlane = 1f;
                         }
-                        Main.ThirdPersonCamera.nearClipPlane = Main.TabletCamera.nearClipPlane;
-                        Main.NearClipText.text = Main.TabletCamera.nearClipPlane.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.ThirdPersonCamera.nearClipPlane = Main.Instance.TabletCamera.nearClipPlane;
+                        Main.Instance.NearClipText.text = Main.Instance.TabletCamera.nearClipPlane.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "NearClipUp":
-                        Main.TabletCamera.nearClipPlane += 0.01f;
-                        if (Main.TabletCamera.nearClipPlane > 1.0)
+                        Main.Instance.TabletCamera.nearClipPlane += 0.01f;
+                        if (Main.Instance.TabletCamera.nearClipPlane > 1.0)
                         {
-                            Main.TabletCamera.nearClipPlane = 0.01f;
-                            Main.ThirdPersonCamera.nearClipPlane = 0.01f;
+                            Main.Instance.TabletCamera.nearClipPlane = 0.01f;
+                            Main.Instance.ThirdPersonCamera.nearClipPlane = 0.01f;
                         }
-                        Main.ThirdPersonCamera.nearClipPlane = Main.TabletCamera.nearClipPlane;
-                        Main.NearClipText.text = Main.TabletCamera.nearClipPlane.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.ThirdPersonCamera.nearClipPlane = Main.Instance.TabletCamera.nearClipPlane;
+                        Main.Instance.NearClipText.text = Main.Instance.TabletCamera.nearClipPlane.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "FPButton":
-                        Main.fp = !Main.fp;
+                        Main.Instance.fp = !Main.Instance.fp;
                         break;
                     case "MinDistDownButton":
-                        Main.minDist -= 0.1f;
-                        if (Main.minDist < 1)
+                        Main.Instance.minDist -= 0.1f;
+                        if (Main.Instance.minDist < 1)
                         {
-                            Main.minDist = 1;
+                            Main.Instance.minDist = 1;
                         }
-                        Main.MinDistText.text = Main.minDist.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.MinDistText.text = Main.Instance.minDist.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "MinDistUpButton":
-                        Main.minDist += 0.1f;
-                        if (Main.minDist > 10)
+                        Main.Instance.minDist += 0.1f;
+                        if (Main.Instance.minDist > 10)
                         {
-                            Main.minDist = 10;
+                            Main.Instance.minDist = 10;
                         }
-                        Main.MinDistText.text = Main.minDist.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.MinDistText.text = Main.Instance.minDist.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "SpeedUpButton":
-                        Main.fpspeed += 0.01f;
-                        if (Main.fpspeed > 0.1)
+                        Main.Instance.fpspeed += 0.01f;
+                        if (Main.Instance.fpspeed > 0.1)
                         {
-                            Main.fpspeed = 0.1f;
+                            Main.Instance.fpspeed = 0.1f;
                         }
-                        Main.SpeedText.text = Main.fpspeed.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.SpeedText.text = Main.Instance.fpspeed.ToString();
+                        Main.Instance.canbeused = true;
                         break;
                     case "SpeedDownButton":
-                        Main.fpspeed -= 0.01f;
-                        if (Main.fpspeed < 0.01)
+                        Main.Instance.fpspeed -= 0.01f;
+                        if (Main.Instance.fpspeed < 0.01)
                         {
-                            Main.fpspeed = 0.01f;
+                            Main.Instance.fpspeed = 0.01f;
                         }
-                        Main.SpeedText.text = Main.fpspeed.ToString();
-                        Main.canbeused = true;
+                        Main.Instance.SpeedText.text = Main.Instance.fpspeed.ToString();
+                        Main.Instance.canbeused = true;
                         break;
-                    case "GreenScreenButton":
-                        Main.ColorScreenGO.active = !Main.ColorScreenGO.active;
-                        if (Main.ColorScreenGO.active)
+                    case "TPModeDownButton":
+                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
                         {
-                            Main.ColorScreenText.text = "(ENABLED)";
+                            Main.Instance.TPVMode = Main.TPVModes.FRONT;
                         }
                         else
                         {
-                            Main.ColorScreenText.text = "(DISABLED)";
+                            Main.Instance.TPVMode = Main.TPVModes.BACK;
+                        }
+                        Main.Instance.TPText.text = Main.Instance.TPVMode.ToString();
+                        break;
+                    case "TPModeUpButton":
+                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
+                        {
+                            Main.Instance.TPVMode = Main.TPVModes.FRONT;
+                        }
+                        else
+                        {
+                            Main.Instance.TPVMode = Main.TPVModes.BACK;
+                        }
+                        Main.Instance.TPText.text = Main.Instance.TPVMode.ToString();
+                        break;
+                    case "TPRotButton":
+                        Main.Instance.followheadrot = !Main.Instance.followheadrot;
+                        Main.Instance.TPRotText.text = Main.Instance.followheadrot.ToString().ToUpper();
+                        break;
+                    case "TPRotButton1":
+                        Main.Instance.followheadrot = !Main.Instance.followheadrot;
+                        Main.Instance.TPRotText.text = Main.Instance.followheadrot.ToString().ToUpper();
+                        break;
+                    case "GreenScreenButton":
+                        Main.Instance.ColorScreenGO.active = !Main.Instance.ColorScreenGO.active;
+                        if (Main.Instance.ColorScreenGO.active)
+                        {
+                            Main.Instance.ColorScreenText.text = "(ENABLED)";
+                        }
+                        else
+                        {
+                            Main.Instance.ColorScreenText.text = "(DISABLED)";
                         }
                         break;
                     case "RedButton":
-                        foreach (Material mat in Main.ScreenMats)
+                        foreach (Material mat in Main.Instance.ScreenMats)
                         {
                             mat.color = Color.red;
                         }
                         break;
                     case "GreenButton":
-                        foreach (Material mat in Main.ScreenMats)
+                        foreach (Material mat in Main.Instance.ScreenMats)
                         {
                             mat.color = Color.green;
                         }
                         break;
                     case "BlueButton":
-                        foreach (Material mat in Main.ScreenMats)
+                        foreach (Material mat in Main.Instance.ScreenMats)
                         {
                             mat.color = Color.blue;
                         }
