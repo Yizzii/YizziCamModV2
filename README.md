@@ -2,8 +2,6 @@
 
 First Camera Mod with in game UI! (that i know of)
 
-## NEEDS UTILLA TO WORK 
-
 ![](https://github.com/Yizzii/YizziCamModV2/blob/main/cammod.gif)
 
 ### *Features:*
@@ -11,7 +9,7 @@ First Camera Mod with in game UI! (that i know of)
 * Freecam with gamepad support
 * Spectator with ajustable offset (and a toggle to control it with wasd)
 * First Person View with smoothing
-* Third Person View (like gtags default camera, just smoother)
+* Third Person View (like gtags default camera just smoother,misc page for settings, front/back and follow head rotation)
 * Follow Player (Camera will look at and follow player, misc page for settings, minimum distance and speed)
 * Grabbable Handles (you can only grab right side with right hand and left side with left hand)
 * Green Screen (in city)
@@ -22,7 +20,7 @@ First Camera Mod with in game UI! (that i know of)
 * disable third person view by pressing X/Y
 * press X/Y to teleport camera in front of you
 * hold grip on banana handle to grab camera
-* press tab on keyboard for monitor UI
+* press tab on IRL keyboard for monitor UI
 * WASD/arrow keys for freecam(also a toggle for gamepad)
  
 # *Disclamers:*
