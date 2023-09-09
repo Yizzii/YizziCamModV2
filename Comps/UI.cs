@@ -36,7 +36,7 @@ namespace YizziCamModV2.Comps
         float posY;
         Vector3 specoffset = new Vector3(0.3f, 0.1f, -1.5f);
         Vector3 velocity = Vector3.zero;
-        void Start ()
+        void Start()
         {
             rigcache = GameObject.Find("Player Objects/RigCache/Rig Parent");
             forest = GameObject.Find("Environment Objects/LocalObjects_Prefab/Forest");
@@ -65,18 +65,18 @@ namespace YizziCamModV2.Comps
                     }
                     if (freecam)
                     {
-                        Main.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                        CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
                     }
-                    if (!Main.Instance.flipped)
+                    if (!CameraController.Instance.flipped)
                     {
-                        Main.Instance.flipped = true;
-                        Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                        CameraController.Instance.flipped = true;
+                        CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                     }
-                    Main.Instance.fpv = false;
-                    Main.Instance.fp = false;
-                    Main.Instance.tpv = false;
+                    CameraController.Instance.fpv = false;
+                    CameraController.Instance.fp = false;
+                    CameraController.Instance.tpv = false;
                     freecam = !freecam;
                 }
                 if (GUI.Button(new Rect(35f, 90f, 100f, 20f), "Spectator"))
@@ -88,16 +88,16 @@ namespace YizziCamModV2.Comps
                             specui = !specui;
                         }
                     }
-                    Main.Instance.fpv = false;
-                    Main.Instance.fp = false;
-                    Main.Instance.tpv = false;
+                    CameraController.Instance.fpv = false;
+                    CameraController.Instance.fp = false;
+                    CameraController.Instance.tpv = false;
                 }
                 if (GUI.Button(new Rect(140f, 90f, 45f, 20f), "Stop"))
                 {
                     if (spectating)
                     {
                         followobject = null;
-                        Main.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                        CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
                         spectating = false;
                     }
                 }
@@ -130,15 +130,15 @@ namespace YizziCamModV2.Comps
                             {
                                 followobject = player.gameObject;
                                 spectating = true;
-                                Main.Instance.fp = false;
-                                Main.Instance.fpv = false;
-                                Main.Instance.tpv = false;
-                                if (Main.Instance.flipped)
+                                CameraController.Instance.fp = false;
+                                CameraController.Instance.fpv = false;
+                                CameraController.Instance.tpv = false;
+                                if (CameraController.Instance.flipped)
                                 {
-                                    Main.Instance.flipped = false;
-                                    Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                    Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                    Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                                    CameraController.Instance.flipped = false;
+                                    CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                    CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                    CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                                 }
                             }
                         }
@@ -189,49 +189,49 @@ namespace YizziCamModV2.Comps
 
         void Freecam()
         {
-            if (freecam&&!controllerfreecam)
+            if (freecam && !controllerfreecam)
             {
                 //movement
                 if (Keyboard.current.wKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position -= Main.Instance.CameraTablet.transform.forward * +freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position -= CameraController.Instance.CameraTablet.transform.forward * +freecamspeed;
                 }
                 if (Keyboard.current.aKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position += Main.Instance.CameraTablet.transform.right * +freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position += CameraController.Instance.CameraTablet.transform.right * +freecamspeed;
                 }
                 if (Keyboard.current.sKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position += Main.Instance.CameraTablet.transform.forward * +freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position += CameraController.Instance.CameraTablet.transform.forward * +freecamspeed;
                 }
                 if (Keyboard.current.dKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position -= Main.Instance.CameraTablet.transform.right * +freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position -= CameraController.Instance.CameraTablet.transform.right * +freecamspeed;
                 }
                 if (Keyboard.current.qKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position -= Main.Instance.CameraTablet.transform.up *+ freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position -= CameraController.Instance.CameraTablet.transform.up * +freecamspeed;
                 }
                 if (Keyboard.current.eKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.position += Main.Instance.CameraTablet.transform.up *+ freecamspeed;
+                    CameraController.Instance.CameraTablet.transform.position += CameraController.Instance.CameraTablet.transform.up * +freecamspeed;
                 }
                 // arrow key rotation
                 if (Keyboard.current.leftArrowKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.eulerAngles += new Vector3(0f, -freecamsens, 0f);
+                    CameraController.Instance.CameraTablet.transform.eulerAngles += new Vector3(0f, -freecamsens, 0f);
                 }
                 if (Keyboard.current.rightArrowKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.eulerAngles += new Vector3(0f, freecamsens, 0f);
+                    CameraController.Instance.CameraTablet.transform.eulerAngles += new Vector3(0f, freecamsens, 0f);
                 }
                 if (Keyboard.current.upArrowKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.eulerAngles += new Vector3(freecamsens, 0f, 0f);
+                    CameraController.Instance.CameraTablet.transform.eulerAngles += new Vector3(freecamsens, 0f, 0f);
                 }
                 if (Keyboard.current.downArrowKey.isPressed)
                 {
-                    Main.Instance.CameraTablet.transform.eulerAngles += new Vector3(-freecamsens, 0f, 0f);
+                    CameraController.Instance.CameraTablet.transform.eulerAngles += new Vector3(-freecamsens, 0f, 0f);
                 }
             }
             if (freecam && controllerfreecam)
@@ -241,16 +241,16 @@ namespace YizziCamModV2.Comps
                 rotX += InputManager.instance.GPRightStick.x * freecamsens;
                 rotY += InputManager.instance.GPRightStick.y * freecamsens;
                 Vector3 movementdir = new Vector3(-x, posY, -y);
-                Main.Instance.CameraTablet.transform.Translate(movementdir * freecamspeed);
+                CameraController.Instance.CameraTablet.transform.Translate(movementdir * freecamspeed);
                 rotY = Mathf.Clamp(rotY, -90f, 90f);
-                Main.Instance.CameraTablet.transform.rotation = Quaternion.Euler(rotY, rotX,0);
+                CameraController.Instance.CameraTablet.transform.rotation = Quaternion.Euler(rotY, rotX, 0);
                 if (Gamepad.current.rightShoulder.isPressed)
                 {
-                    posY = 3f *+ freecamspeed;
+                    posY = 3f * +freecamspeed;
                 }
                 else if (Gamepad.current.leftShoulder.isPressed)
                 {
-                    posY = -3f *+ freecamspeed;
+                    posY = -3f * +freecamspeed;
                 }
                 else
                 {
@@ -264,15 +264,15 @@ namespace YizziCamModV2.Comps
             if (followobject != null)
             {
                 Vector3 targetPosition = followobject.transform.TransformPoint(specoffset);
-                Main.Instance.CameraTablet.transform.position = Vector3.SmoothDamp(Main.Instance.CameraTablet.transform.position, targetPosition, ref velocity, 0.2f);
+                CameraController.Instance.CameraTablet.transform.position = Vector3.SmoothDamp(CameraController.Instance.CameraTablet.transform.position, targetPosition, ref velocity, 0.2f);
                 if (speclookat)
                 {
-                    var targetRotation = Quaternion.LookRotation(followobject.transform.position - Main.Instance.CameraTablet.transform.position);
-                    Main.Instance.CameraTablet.transform.rotation = Quaternion.Lerp(Main.Instance.CameraTablet.transform.rotation, targetRotation, 0.2f);
+                    var targetRotation = Quaternion.LookRotation(followobject.transform.position - CameraController.Instance.CameraTablet.transform.position);
+                    CameraController.Instance.CameraTablet.transform.rotation = Quaternion.Lerp(CameraController.Instance.CameraTablet.transform.rotation, targetRotation, 0.2f);
                 }
                 else
                 {
-                    Main.Instance.CameraTablet.transform.rotation = Quaternion.Lerp(Main.Instance.CameraTablet.transform.rotation, followobject.transform.rotation, 0.2f);
+                    CameraController.Instance.CameraTablet.transform.rotation = Quaternion.Lerp(CameraController.Instance.CameraTablet.transform.rotation, followobject.transform.rotation, 0.2f);
                 }
                 if (controloffset)
                 {
@@ -314,7 +314,7 @@ namespace YizziCamModV2.Comps
                         {
                             specoffset.y = -3;
                         }
-                        specoffset.y -= 0.02f; 
+                        specoffset.y -= 0.02f;
                     }
                     if (Keyboard.current.eKey.isPressed) // down
                     {
@@ -322,7 +322,7 @@ namespace YizziCamModV2.Comps
                         {
                             specoffset.y = 3;
                         }
-                        specoffset.y += 0.02f; 
+                        specoffset.y += 0.02f;
                     }
                 }
             }
@@ -330,7 +330,7 @@ namespace YizziCamModV2.Comps
             {
                 if (spectating)
                 {
-                    Main.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
                     spectating = false;
                 }
             }

@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
+using UnityEngine;
 using YizziCamModV2;
-namespace GorillaChat.Patches
+namespace YizziCamModV2.Patches
 {
     [HarmonyPatch(typeof(GorillaTagger))]
     [HarmonyPatch("Start", MethodType.Normal)]
@@ -8,7 +9,8 @@ namespace GorillaChat.Patches
     {
         private static void Postfix()
         {
-            Main.Instance.YizziStart();
+            new GameObject().AddComponent<CameraController>();
+            CameraController.Instance.YizziStart();
         }
     }
 }

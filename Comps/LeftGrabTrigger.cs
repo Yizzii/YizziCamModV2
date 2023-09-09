@@ -12,15 +12,15 @@ namespace YizziCamModV2.Comps
         {
             if (col.name.Contains("Left"))
             {
-                if (InputManager.instance.LeftGrip & !Main.Instance.fpv)
+                if (InputManager.instance.LeftGrip & !CameraController.Instance.fpv)
                 {
-                    Main.Instance.CameraTablet.transform.parent = Main.Instance.LeftHandGO.transform;
-                    if (Main.Instance.fp) { Main.Instance.fp = false; }
+                    CameraController.Instance.CameraTablet.transform.parent = CameraController.Instance.LeftHandGO.transform;
+                    if (CameraController.Instance.fp) { CameraController.Instance.fp = false; }
                 }
             }
-            if (!InputManager.instance.LeftGrip & Main.Instance.CameraTablet.transform.parent == Main.Instance.LeftHandGO.transform)
+            if (!InputManager.instance.LeftGrip & CameraController.Instance.CameraTablet.transform.parent == CameraController.Instance.LeftHandGO.transform)
             {
-                Main.Instance.CameraTablet.transform.parent = null;
+                CameraController.Instance.CameraTablet.transform.parent = null;
             }
         }
     }

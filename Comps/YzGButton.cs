@@ -9,236 +9,236 @@ namespace YizziCamModV2.Comps
             this.gameObject.layer = 18;
         }
         void OnEnable() { Invoke("ButtonTimer", 1f); }
-        void OnDisable() { Main.Instance.canbeused = false; }
+        void OnDisable() { CameraController.Instance.canbeused = false; }
         void ButtonTimer()
         {
             if (!this.enabled)
             {
-                Main.Instance.canbeused = false;
+                CameraController.Instance.canbeused = false;
             }
-            Main.Instance.canbeused = true;
+            CameraController.Instance.canbeused = true;
         }
         void OnTriggerEnter(Collider col)
         {
-            if (Main.Instance.canbeused && col.name == "RightHandTriggerCollider" | col.name == "LeftHandTriggerCollider")
+            if (CameraController.Instance.canbeused && col.name == "RightHandTriggerCollider" | col.name == "LeftHandTriggerCollider")
             {
-                Main.Instance.canbeused = false;
+                CameraController.Instance.canbeused = false;
                 Invoke("ButtonTimer", 1f);
                 switch (this.name)
                 {
                     case "BackButton":
-                        Main.Instance.MainPage.SetActive(true);
-                        Main.Instance.MiscPage.SetActive(false);
+                        CameraController.Instance.MainPage.SetActive(true);
+                        CameraController.Instance.MiscPage.SetActive(false);
                         break;
                     case "ControlsButton":
-                        if (!Main.Instance.openedurl)
+                        if (!CameraController.Instance.openedurl)
                         {
                             Application.OpenURL("https://github.com/Yizzii/YizziCamModV2#controls");
-                            Main.Instance.openedurl = true;
+                            CameraController.Instance.openedurl = true;
                         }
                         break;
                     case "SmoothingDownButton":
-                        Main.Instance.smoothing -= 0.01f;
-                        if (Main.Instance.smoothing < 0.05f)
+                        CameraController.Instance.smoothing -= 0.01f;
+                        if (CameraController.Instance.smoothing < 0.05f)
                         {
-                            Main.Instance.smoothing = 0.11f;
+                            CameraController.Instance.smoothing = 0.11f;
                         }
-                        Main.Instance.SmoothText.text = Main.Instance.smoothing.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.SmoothText.text = CameraController.Instance.smoothing.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "SmoothingUpButton":
-                        Main.Instance.smoothing += 0.01f;
-                        if (Main.Instance.smoothing > 0.11f)
+                        CameraController.Instance.smoothing += 0.01f;
+                        if (CameraController.Instance.smoothing > 0.11f)
                         {
-                            Main.Instance.smoothing = 0.05f;
+                            CameraController.Instance.smoothing = 0.05f;
                         }
-                        Main.Instance.SmoothText.text = Main.Instance.smoothing.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.SmoothText.text = CameraController.Instance.smoothing.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "TPVButton":
-                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
+                        if (CameraController.Instance.TPVMode == CameraController.TPVModes.BACK)
                         {
-                            if (Main.Instance.flipped)
+                            if (CameraController.Instance.flipped)
                             {
-                                Main.Instance.flipped = false;
-                                Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                                CameraController.Instance.flipped = false;
+                                CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                             }
                         }
-                        else if (Main.Instance.TPVMode == Main.TPVModes.FRONT)
+                        else if (CameraController.Instance.TPVMode == CameraController.TPVModes.FRONT)
                         {
-                            if (!Main.Instance.flipped)
+                            if (!CameraController.Instance.flipped)
                             {
-                                Main.Instance.flipped = true;
-                                Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                                Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                                CameraController.Instance.flipped = true;
+                                CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                                CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                             }
                         }
-                        Main.Instance.fp = false;
-                        Main.Instance.fpv = false;
-                        Main.Instance.tpv = true;
+                        CameraController.Instance.fp = false;
+                        CameraController.Instance.fpv = false;
+                        CameraController.Instance.tpv = true;
                         break;
                     case "FPVButton":
-                        if (Main.Instance.flipped)
+                        if (CameraController.Instance.flipped)
                         {
-                            Main.Instance.flipped = false;
-                            Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                            Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                            CameraController.Instance.flipped = false;
+                            CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                            CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                         }
-                        Main.Instance.fp = false;
-                        Main.Instance.fpv = true;
+                        CameraController.Instance.fp = false;
+                        CameraController.Instance.fpv = true;
                         break;
                     case "FlipCamButton":
-                        Main.Instance.flipped = !Main.Instance.flipped;
-                        Main.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        Main.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                        CameraController.Instance.flipped = !CameraController.Instance.flipped;
+                        CameraController.Instance.ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        CameraController.Instance.TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                        CameraController.Instance.FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
                         break;
                     case "FovDown":
-                        Main.Instance.TabletCamera.fieldOfView -= 5f;
-                        if (Main.Instance.TabletCamera.fieldOfView < 20)
+                        CameraController.Instance.TabletCamera.fieldOfView -= 5f;
+                        if (CameraController.Instance.TabletCamera.fieldOfView < 20)
                         {
-                            Main.Instance.TabletCamera.fieldOfView = 130f;
-                            Main.Instance.ThirdPersonCamera.fieldOfView = 130f;
+                            CameraController.Instance.TabletCamera.fieldOfView = 130f;
+                            CameraController.Instance.ThirdPersonCamera.fieldOfView = 130f;
                         }
-                        Main.Instance.ThirdPersonCamera.fieldOfView = Main.Instance.TabletCamera.fieldOfView;
-                        Main.Instance.FovText.text = Main.Instance.TabletCamera.fieldOfView.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.ThirdPersonCamera.fieldOfView = CameraController.Instance.TabletCamera.fieldOfView;
+                        CameraController.Instance.FovText.text = CameraController.Instance.TabletCamera.fieldOfView.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "FovUP":
-                        Main.Instance.TabletCamera.fieldOfView += 5f;
-                        if (Main.Instance.TabletCamera.fieldOfView > 130)
+                        CameraController.Instance.TabletCamera.fieldOfView += 5f;
+                        if (CameraController.Instance.TabletCamera.fieldOfView > 130)
                         {
-                            Main.Instance.TabletCamera.fieldOfView = 20f;
-                            Main.Instance.ThirdPersonCamera.fieldOfView = 20f;
+                            CameraController.Instance.TabletCamera.fieldOfView = 20f;
+                            CameraController.Instance.ThirdPersonCamera.fieldOfView = 20f;
                         }
-                        Main.Instance.ThirdPersonCamera.fieldOfView = Main.Instance.TabletCamera.fieldOfView;
-                        Main.Instance.FovText.text = Main.Instance.TabletCamera.fieldOfView.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.ThirdPersonCamera.fieldOfView = CameraController.Instance.TabletCamera.fieldOfView;
+                        CameraController.Instance.FovText.text = CameraController.Instance.TabletCamera.fieldOfView.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "MiscButton":
-                        Main.Instance.MainPage.SetActive(false);
-                        Main.Instance.MiscPage.SetActive(true);
+                        CameraController.Instance.MainPage.SetActive(false);
+                        CameraController.Instance.MiscPage.SetActive(true);
                         break;
                     case "NearClipDown":
-                        Main.Instance.TabletCamera.nearClipPlane -= 0.01f;
-                        if (Main.Instance.TabletCamera.nearClipPlane < 0.01)
+                        CameraController.Instance.TabletCamera.nearClipPlane -= 0.01f;
+                        if (CameraController.Instance.TabletCamera.nearClipPlane < 0.01)
                         {
-                            Main.Instance.TabletCamera.nearClipPlane = 1f;
-                            Main.Instance.ThirdPersonCamera.nearClipPlane = 1f;
+                            CameraController.Instance.TabletCamera.nearClipPlane = 1f;
+                            CameraController.Instance.ThirdPersonCamera.nearClipPlane = 1f;
                         }
-                        Main.Instance.ThirdPersonCamera.nearClipPlane = Main.Instance.TabletCamera.nearClipPlane;
-                        Main.Instance.NearClipText.text = Main.Instance.TabletCamera.nearClipPlane.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.ThirdPersonCamera.nearClipPlane = CameraController.Instance.TabletCamera.nearClipPlane;
+                        CameraController.Instance.NearClipText.text = CameraController.Instance.TabletCamera.nearClipPlane.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "NearClipUp":
-                        Main.Instance.TabletCamera.nearClipPlane += 0.01f;
-                        if (Main.Instance.TabletCamera.nearClipPlane > 1.0)
+                        CameraController.Instance.TabletCamera.nearClipPlane += 0.01f;
+                        if (CameraController.Instance.TabletCamera.nearClipPlane > 1.0)
                         {
-                            Main.Instance.TabletCamera.nearClipPlane = 0.01f;
-                            Main.Instance.ThirdPersonCamera.nearClipPlane = 0.01f;
+                            CameraController.Instance.TabletCamera.nearClipPlane = 0.01f;
+                            CameraController.Instance.ThirdPersonCamera.nearClipPlane = 0.01f;
                         }
-                        Main.Instance.ThirdPersonCamera.nearClipPlane = Main.Instance.TabletCamera.nearClipPlane;
-                        Main.Instance.NearClipText.text = Main.Instance.TabletCamera.nearClipPlane.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.ThirdPersonCamera.nearClipPlane = CameraController.Instance.TabletCamera.nearClipPlane;
+                        CameraController.Instance.NearClipText.text = CameraController.Instance.TabletCamera.nearClipPlane.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "FPButton":
-                        Main.Instance.fp = !Main.Instance.fp;
+                        CameraController.Instance.fp = !CameraController.Instance.fp;
                         break;
                     case "MinDistDownButton":
-                        Main.Instance.minDist -= 0.1f;
-                        if (Main.Instance.minDist < 1)
+                        CameraController.Instance.minDist -= 0.1f;
+                        if (CameraController.Instance.minDist < 1)
                         {
-                            Main.Instance.minDist = 1;
+                            CameraController.Instance.minDist = 1;
                         }
-                        Main.Instance.MinDistText.text = Main.Instance.minDist.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.MinDistText.text = CameraController.Instance.minDist.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "MinDistUpButton":
-                        Main.Instance.minDist += 0.1f;
-                        if (Main.Instance.minDist > 10)
+                        CameraController.Instance.minDist += 0.1f;
+                        if (CameraController.Instance.minDist > 10)
                         {
-                            Main.Instance.minDist = 10;
+                            CameraController.Instance.minDist = 10;
                         }
-                        Main.Instance.MinDistText.text = Main.Instance.minDist.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.MinDistText.text = CameraController.Instance.minDist.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "SpeedUpButton":
-                        Main.Instance.fpspeed += 0.01f;
-                        if (Main.Instance.fpspeed > 0.1)
+                        CameraController.Instance.fpspeed += 0.01f;
+                        if (CameraController.Instance.fpspeed > 0.1)
                         {
-                            Main.Instance.fpspeed = 0.1f;
+                            CameraController.Instance.fpspeed = 0.1f;
                         }
-                        Main.Instance.SpeedText.text = Main.Instance.fpspeed.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.SpeedText.text = CameraController.Instance.fpspeed.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "SpeedDownButton":
-                        Main.Instance.fpspeed -= 0.01f;
-                        if (Main.Instance.fpspeed < 0.01)
+                        CameraController.Instance.fpspeed -= 0.01f;
+                        if (CameraController.Instance.fpspeed < 0.01)
                         {
-                            Main.Instance.fpspeed = 0.01f;
+                            CameraController.Instance.fpspeed = 0.01f;
                         }
-                        Main.Instance.SpeedText.text = Main.Instance.fpspeed.ToString();
-                        Main.Instance.canbeused = true;
+                        CameraController.Instance.SpeedText.text = CameraController.Instance.fpspeed.ToString();
+                        CameraController.Instance.canbeused = true;
                         break;
                     case "TPModeDownButton":
-                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
+                        if (CameraController.Instance.TPVMode == CameraController.TPVModes.BACK)
                         {
-                            Main.Instance.TPVMode = Main.TPVModes.FRONT;
+                            CameraController.Instance.TPVMode = CameraController.TPVModes.FRONT;
                         }
                         else
                         {
-                            Main.Instance.TPVMode = Main.TPVModes.BACK;
+                            CameraController.Instance.TPVMode = CameraController.TPVModes.BACK;
                         }
-                        Main.Instance.TPText.text = Main.Instance.TPVMode.ToString();
+                        CameraController.Instance.TPText.text = CameraController.Instance.TPVMode.ToString();
                         break;
                     case "TPModeUpButton":
-                        if (Main.Instance.TPVMode == Main.TPVModes.BACK)
+                        if (CameraController.Instance.TPVMode == CameraController.TPVModes.BACK)
                         {
-                            Main.Instance.TPVMode = Main.TPVModes.FRONT;
+                            CameraController.Instance.TPVMode = CameraController.TPVModes.FRONT;
                         }
                         else
                         {
-                            Main.Instance.TPVMode = Main.TPVModes.BACK;
+                            CameraController.Instance.TPVMode = CameraController.TPVModes.BACK;
                         }
-                        Main.Instance.TPText.text = Main.Instance.TPVMode.ToString();
+                        CameraController.Instance.TPText.text = CameraController.Instance.TPVMode.ToString();
                         break;
                     case "TPRotButton":
-                        Main.Instance.followheadrot = !Main.Instance.followheadrot;
-                        Main.Instance.TPRotText.text = Main.Instance.followheadrot.ToString().ToUpper();
+                        CameraController.Instance.followheadrot = !CameraController.Instance.followheadrot;
+                        CameraController.Instance.TPRotText.text = CameraController.Instance.followheadrot.ToString().ToUpper();
                         break;
                     case "TPRotButton1":
-                        Main.Instance.followheadrot = !Main.Instance.followheadrot;
-                        Main.Instance.TPRotText.text = Main.Instance.followheadrot.ToString().ToUpper();
+                        CameraController.Instance.followheadrot = !CameraController.Instance.followheadrot;
+                        CameraController.Instance.TPRotText.text = CameraController.Instance.followheadrot.ToString().ToUpper();
                         break;
                     case "GreenScreenButton":
-                        Main.Instance.ColorScreenGO.active = !Main.Instance.ColorScreenGO.active;
-                        if (Main.Instance.ColorScreenGO.active)
+                        CameraController.Instance.ColorScreenGO.active = !CameraController.Instance.ColorScreenGO.active;
+                        if (CameraController.Instance.ColorScreenGO.active)
                         {
-                            Main.Instance.ColorScreenText.text = "(ENABLED)";
+                            CameraController.Instance.ColorScreenText.text = "(ENABLED)";
                         }
                         else
                         {
-                            Main.Instance.ColorScreenText.text = "(DISABLED)";
+                            CameraController.Instance.ColorScreenText.text = "(DISABLED)";
                         }
                         break;
                     case "RedButton":
-                        foreach (Material mat in Main.Instance.ScreenMats)
+                        foreach (Material mat in CameraController.Instance.ScreenMats)
                         {
                             mat.color = Color.red;
                         }
                         break;
                     case "GreenButton":
-                        foreach (Material mat in Main.Instance.ScreenMats)
+                        foreach (Material mat in CameraController.Instance.ScreenMats)
                         {
                             mat.color = Color.green;
                         }
                         break;
                     case "BlueButton":
-                        foreach (Material mat in Main.Instance.ScreenMats)
+                        foreach (Material mat in CameraController.Instance.ScreenMats)
                         {
                             mat.color = Color.blue;
                         }
