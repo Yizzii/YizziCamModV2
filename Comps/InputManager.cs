@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.XR;
 
@@ -11,11 +11,8 @@ namespace YizziCamModV2.Comps
         private XRNode rHandNode = XRNode.RightHand;
         public bool LeftGrip;
         public bool RightGrip;
-        public bool LeftTrigger;
-        public bool RightTrigger;
-        public bool LeftStick;
-        public bool RightStick;
         public bool LeftPrimaryButton; // x
+        public bool RightPrimaryButton;
         // gamepad
         public Vector2 GPLeftStick;
         public Vector2 GPRightStick;
@@ -26,13 +23,11 @@ namespace YizziCamModV2.Comps
         }
         void Update()
         {
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out LeftGrip);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.gripButton, out RightGrip);
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out LeftTrigger);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.triggerButton, out RightTrigger);
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out LeftStick);
-            InputDevices.GetDeviceAtXRNode(rHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primary2DAxisClick, out RightStick);
-            InputDevices.GetDeviceAtXRNode(lHandNode).TryGetFeatureValue(UnityEngine.XR.CommonUsages.primaryButton, out LeftPrimaryButton);
+            LeftGrip = ControllerInputPoller.instance.leftGrab;
+            RightGrip = ControllerInputPoller.instance.rightGrab;
+            LeftPrimaryButton = ControllerInputPoller.instance.leftControllerPrimaryButton;
+            RightPrimaryButton = ControllerInputPoller.instance.rightControllerPrimaryButton;
+
             if (Gamepad.current != null)
             {
                 GPLeftStick = Gamepad.current.leftStick.ReadValue();
