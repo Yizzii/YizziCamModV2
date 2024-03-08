@@ -1,6 +1,6 @@
-# YizziCamModV2
+# YizziCamModV2 												[![Github All Releases](https://img.shields.io/github/downloads/Yizzii/YizziCamModV2/total.svg)]() 
 
-First Camera Mod with in game UI! (that i know of)
+Camera Mod with in game UI!
 
 ![](https://github.com/Yizzii/YizziCamModV2/blob/main/cammod.gif)
 
@@ -28,4 +28,4 @@ First Camera Mod with in game UI! (that i know of)
 
 * **controls can be different depending what you're playing on(steamvr,oculuspcvr,index, etc.)**
 
-* **if you find any bugs report them to @yizzi. on discord**
+* **if you find any bugs don't report them to @yizzi. on discord**
