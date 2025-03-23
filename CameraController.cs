@@ -198,7 +198,7 @@ namespace YizziCamModV2
                         }
                         MainPage.active = true;
                     }
-                    CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    CameraTablet.transform.position = GTPlayer.Instance.headCollider.transform.position + GTPlayer.Instance.headCollider.transform.forward;
                 }
                 if (fp)
                 {
@@ -254,7 +254,7 @@ namespace YizziCamModV2
                     }
                     if (InputManager.instance.LeftPrimaryButton)
                     {
-                        CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                        CameraTablet.transform.position = GTPlayer.Instance.headCollider.transform.position + GTPlayer.Instance.headCollider.transform.forward;
                         foreach (MeshRenderer mr in meshRenderers)
                         {
                             mr.enabled = true;

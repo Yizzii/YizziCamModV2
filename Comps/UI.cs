@@ -65,7 +65,7 @@ namespace YizziCamModV2.Comps
                     }
                     if (freecam)
                     {
-                        CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                        CameraController.Instance.CameraTablet.transform.position = GTPlayer.Instance.headCollider.transform.position + GTPlayer.Instance.headCollider.transform.forward;
                     }
                     if (!CameraController.Instance.flipped)
                     {
@@ -97,7 +97,7 @@ namespace YizziCamModV2.Comps
                     if (spectating)
                     {
                         followobject = null;
-                        CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                        CameraController.Instance.CameraTablet.transform.position = GTPlayer.Instance.headCollider.transform.position + GTPlayer.Instance.headCollider.transform.forward;
                         spectating = false;
                     }
                 }
@@ -330,7 +330,7 @@ namespace YizziCamModV2.Comps
             {
                 if (spectating)
                 {
-                    CameraController.Instance.CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    CameraController.Instance.CameraTablet.transform.position = GTPlayer.Instance.headCollider.transform.position + GTPlayer.Instance.headCollider.transform.forward;
                     spectating = false;
                 }
             }
