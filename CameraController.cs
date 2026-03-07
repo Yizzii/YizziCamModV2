@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using BepInEx;
@@ -8,11 +8,13 @@ using UnityEngine;
 using UnityEngine.UI;
 using YizziCamModV2.Comps;
 #pragma warning disable CS0618
+
 namespace YizziCamModV2
 {
     public class CameraController : MonoBehaviour
     {
         public static CameraController Instance;
+
         public GameObject CameraTablet;
         public GameObject FirstPersonCameraGO;
         public GameObject ThirdPersonCameraGO;
@@ -62,6 +64,7 @@ namespace YizziCamModV2
         Vector3 velocity = Vector3.zero;
         public TPVModes TPVMode = TPVModes.BACK;
         bool init;
+
         void Awake()
         {
             Instance = this;
@@ -69,91 +72,112 @@ namespace YizziCamModV2
 
         public void YizziStart()
         {
-            this.gameObject.AddComponent<InputManager>().gameObject.AddComponent<UI>();
+            // Add InputManager and UI
+            this.gameObject.AddComponent<InputManager>();
+            this.gameObject.AddComponent<UI>();
+
+            // Load assets safely
             ColorScreenGO = LoadBundle("ColorScreen", "YizziCamModV2.Assets.colorscreen");
             CameraTablet = LoadBundle("CameraTablet", "YizziCamModV2.Assets.yizzicamera");
+
+            // Get core player objects
             FirstPersonCameraGO = GorillaTagger.Instance.mainCamera;
             ThirdPersonCameraGO = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera");
             CMVirtualCameraGO = GameObject.Find("Player Objects/Third Person Camera/Shoulder Camera/CM vcam1");
             TPVBodyFollower = GorillaTagger.Instance.bodyCollider.gameObject;
-            CMVirtualCamera = CMVirtualCameraGO.GetComponent<CinemachineVirtualCamera>();
-            FirstPersonCamera = FirstPersonCameraGO.GetComponent<Camera>();
-            ThirdPersonCamera = ThirdPersonCameraGO.GetComponent<Camera>();
+
+            CMVirtualCamera = CMVirtualCameraGO?.GetComponent<CinemachineVirtualCamera>();
+            FirstPersonCamera = FirstPersonCameraGO?.GetComponent<Camera>();
+            ThirdPersonCamera = ThirdPersonCameraGO?.GetComponent<Camera>();
             LeftHandGO = GorillaTagger.Instance.leftHandTransform.gameObject;
             RightHandGO = GorillaTagger.Instance.rightHandTransform.gameObject;
-            CameraTablet.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
-            CameraFollower = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/Main Camera/Camera Follower");
-            TabletCameraGO = GameObject.Find("CameraTablet(Clone)/Camera");
-            TabletCamera = TabletCameraGO.GetComponent<Camera>();
-            FakeWebCam = GameObject.Find("CameraTablet(Clone)/FakeCamera");
-            LeftGrabCol = GameObject.Find("CameraTablet(Clone)/LeftGrabCol");
-            RightGrabCol = GameObject.Find("CameraTablet(Clone)/RightGrabCol");
-            LeftGrabCol.AddComponent<LeftGrabTrigger>();
-            RightGrabCol.AddComponent<RightGrabTrigger>();
-            MainPage = GameObject.Find("CameraTablet(Clone)/MainPage");
-            MiscPage = GameObject.Find("CameraTablet(Clone)/MiscPage");
-            FovText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/FovValueText").GetComponent<Text>();
-            SmoothText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/SmoothingValueText").GetComponent<Text>();
-            NearClipText = GameObject.Find("CameraTablet(Clone)/MainPage/Canvas/NearClipValueText").GetComponent<Text>();
-            MinDistText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/MinDistValueText").GetComponent<Text>();
-            SpeedText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/SpeedValueText").GetComponent<Text>();
-            TPText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/TPText").GetComponent<Text>();
-            TPRotText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/TPRotText").GetComponent<Text>();
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/MiscButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/FPVButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/FovUP"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/FovDown"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/FlipCamButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/NearClipUp"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/NearClipDown"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/FPButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/ControlsButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/TPVButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/SmoothingDownButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MainPage/SmoothingUpButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/BackButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/GreenScreenButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/MinDistDownButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/MinDistUpButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/SpeedDownButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/SpeedUpButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/SpeedDownButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/TPModeDownButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/TPModeUpButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/TPRotButton"));
-            Buttons.Add(GameObject.Find("CameraTablet(Clone)/MiscPage/TPRotButton1"));
-            foreach (GameObject btns in Buttons)
-            {
-                btns.AddComponent<YzGButton>();
-            }
-            CMVirtualCamera.enabled = false;
-            ThirdPersonCameraGO.transform.SetParent(CameraTablet.transform, true);
-            CameraTablet.transform.position = new Vector3(-65, 12, -82);
-            ThirdPersonCameraGO.transform.position = TabletCamera.transform.position;
-            ThirdPersonCameraGO.transform.rotation = TabletCamera.transform.rotation;
-            CameraTablet.transform.Rotate(0, 180, 0);
-            ColorScreenText = GameObject.Find("CameraTablet(Clone)/MiscPage/Canvas/ColorScreenText").GetComponent<Text>();
-            ColorButtons.Add(GameObject.Find("ColorScreen(Clone)/Stuff/RedButton"));
-            ColorButtons.Add(GameObject.Find("ColorScreen(Clone)/Stuff/GreenButton"));
-            ColorButtons.Add(GameObject.Find("ColorScreen(Clone)/Stuff/BlueButton"));
-            foreach (GameObject btns in ColorButtons)
-            {
-                btns.AddComponent<YzGButton>();
-            }
-            ScreenMats.Add(GameObject.Find("ColorScreen(Clone)/Screen1").GetComponent<MeshRenderer>().material);
-            ScreenMats.Add(GameObject.Find("ColorScreen(Clone)/Screen2").GetComponent<MeshRenderer>().material);
-            ScreenMats.Add(GameObject.Find("ColorScreen(Clone)/Screen3").GetComponent<MeshRenderer>().material);
-            meshRenderers.Add(GameObject.Find("CameraTablet(Clone)/FakeCamera").GetComponent<MeshRenderer>());
-            meshRenderers.Add(GameObject.Find("CameraTablet(Clone)/Tablet").GetComponent<MeshRenderer>());
-            meshRenderers.Add(GameObject.Find("CameraTablet(Clone)/Handle").GetComponent<MeshRenderer>());
-            meshRenderers.Add(GameObject.Find("CameraTablet(Clone)/Handle2").GetComponent<MeshRenderer>());
-            ColorScreenGO.transform.position = new Vector3(-54.3f, 16.21f, -122.96f);
-            ColorScreenGO.transform.Rotate(0, 30, 0);
-            ColorScreenGO.SetActive(false);
-            MiscPage.SetActive(false);
+
+            // Adjust CameraTablet
+            if (CameraTablet != null) CameraTablet.transform.localScale = Vector3.one * 0.3f;
+            CameraFollower = GameObject.Find("Player Objects/Player VR Controller/GorillaPlayer/TurnParent/Main Camera/Camera");
+
+            TabletCameraGO = CameraTablet?.transform.Find("Camera")?.gameObject;
+            TabletCamera = TabletCameraGO?.GetComponent<Camera>();
+            FakeWebCam = CameraTablet?.transform.Find("FakeCamera")?.gameObject;
+
+            LeftGrabCol = CameraTablet?.transform.Find("LeftGrabCol")?.gameObject;
+            RightGrabCol = CameraTablet?.transform.Find("RightGrabCol")?.gameObject;
+            LeftGrabCol?.AddComponent<LeftGrabTrigger>();
+            RightGrabCol?.AddComponent<RightGrabTrigger>();
+
+            MainPage = CameraTablet?.transform.Find("MainPage")?.gameObject;
+            MiscPage = CameraTablet?.transform.Find("MiscPage")?.gameObject;
+
+            // UI Text
+            FovText = CameraTablet?.transform.Find("MainPage/Canvas/FovValueText")?.GetComponent<Text>();
+            SmoothText = CameraTablet?.transform.Find("MainPage/Canvas/SmoothingValueText")?.GetComponent<Text>();
+            NearClipText = CameraTablet?.transform.Find("MainPage/Canvas/NearClipValueText")?.GetComponent<Text>();
+            MinDistText = CameraTablet?.transform.Find("MiscPage/Canvas/MinDistValueText")?.GetComponent<Text>();
+            SpeedText = CameraTablet?.transform.Find("MiscPage/Canvas/SpeedValueText")?.GetComponent<Text>();
+            TPText = CameraTablet?.transform.Find("MiscPage/Canvas/TPText")?.GetComponent<Text>();
+            TPRotText = CameraTablet?.transform.Find("MiscPage/Canvas/TPRotText")?.GetComponent<Text>();
+            ColorScreenText = ColorScreenGO?.transform.Find("MiscPage/Canvas/ColorScreenText")?.GetComponent<Text>();
+
+            // Buttons
+            Buttons.AddRange(new GameObject[] {
+                CameraTablet?.transform.Find("MainPage/MiscButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/FPVButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/FovUP")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/FovDown")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/FlipCamButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/NearClipUp")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/NearClipDown")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/FPButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/ControlsButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/TPVButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/SmoothingDownButton")?.gameObject,
+                CameraTablet?.transform.Find("MainPage/SmoothingUpButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/BackButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/GreenScreenButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/MinDistDownButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/MinDistUpButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/SpeedDownButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/SpeedUpButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/TPModeDownButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/TPModeUpButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/TPRotButton")?.gameObject,
+                CameraTablet?.transform.Find("MiscPage/TPRotButton1")?.gameObject
+            });
+
+            foreach (var btn in Buttons) btn?.AddComponent<YzGButton>();
+
+            // Color buttons and materials
+            ColorButtons.AddRange(new GameObject[] {
+                ColorScreenGO?.transform.Find("Stuff/RedButton")?.gameObject,
+                ColorScreenGO?.transform.Find("Stuff/GreenButton")?.gameObject,
+                ColorScreenGO?.transform.Find("Stuff/BlueButton")?.gameObject
+            });
+
+            foreach (var btn in ColorButtons) btn?.AddComponent<YzGButton>();
+
+            ScreenMats.AddRange(new Material[] {
+                ColorScreenGO?.transform.Find("Screen1")?.GetComponent<MeshRenderer>()?.material,
+                ColorScreenGO?.transform.Find("Screen2")?.GetComponent<MeshRenderer>()?.material,
+                ColorScreenGO?.transform.Find("Screen3")?.GetComponent<MeshRenderer>()?.material
+            });
+
+            meshRenderers.AddRange(new MeshRenderer[] {
+                CameraTablet?.transform.Find("FakeCamera")?.GetComponent<MeshRenderer>(),
+                CameraTablet?.transform.Find("Tablet")?.GetComponent<MeshRenderer>(),
+                CameraTablet?.transform.Find("Handle")?.GetComponent<MeshRenderer>(),
+                CameraTablet?.transform.Find("Handle2")?.GetComponent<MeshRenderer>()
+            });
+
+            // Position color screen
+            ColorScreenGO?.transform.SetPositionAndRotation(new Vector3(-54.3f, 16.21f, -122.96f), Quaternion.Euler(0, 30, 0));
+            ColorScreenGO?.SetActive(false);
+            MiscPage?.SetActive(false);
+
+            // Camera settings
             ThirdPersonCamera.nearClipPlane = 0.1f;
             TabletCamera.nearClipPlane = 0.1f;
-            FakeWebCam.transform.Rotate(-180, 180, 0);
+            FakeWebCam?.transform.Rotate(-180, 180, 0);
+
             init = true;
         }
 
@@ -165,111 +189,83 @@ namespace YizziCamModV2
 
         void LateUpdate()
         {
-            if (init)
+            if (!init) return;
+
+            // FPV mode
+            if (fpv)
             {
-                if (fpv)
+                if (MainPage?.activeSelf ?? false)
                 {
-                    if (MainPage.active)
-                    {
-                        foreach (MeshRenderer mr in meshRenderers)
-                        {
-                            mr.enabled = false;
-                        }
-                        MainPage.active = false;
-                    }
-                    CameraTablet.transform.position = CameraFollower.transform.position;
-                    CameraTablet.transform.rotation = Quaternion.Lerp(CameraTablet.transform.rotation, CameraFollower.transform.rotation, smoothing);
+                    foreach (var mr in meshRenderers) if (mr) mr.enabled = false;
+                    MainPage.SetActive(false);
                 }
-                if (InputManager.instance.LeftPrimaryButton && CameraTablet.transform.parent == null)
+                CameraTablet.transform.position = CameraFollower.transform.position;
+                CameraTablet.transform.rotation = Quaternion.Lerp(CameraTablet.transform.rotation, CameraFollower.transform.rotation, smoothing);
+            }
+
+            // Exit cameras
+            if (InputManager.instance.LeftPrimaryButton && CameraTablet.transform.parent == null)
+            {
+                fp = fpv = tpv = false;
+                if (!(MainPage?.activeSelf ?? false))
                 {
-                    fp = false;
-                    fpv = false;
-                    tpv = false;
-                    if (!MainPage.active)
-                    {
-                        foreach (GameObject btns in Buttons)
-                        {
-                            btns.SetActive(true);
-                        }
-                        foreach (MeshRenderer mr in meshRenderers)
-                        {
-                            mr.enabled = true;
-                            CameraTablet.transform.Rotate(0f, -180f, 0f);
-                        }
-                        MainPage.active = true;
-                    }
-                    CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    foreach (var btn in Buttons) btn?.SetActive(true);
+                    foreach (var mr in meshRenderers) if (mr) mr.enabled = true;
+                    CameraTablet.transform.Rotate(0f, -180f, 0f);
+                    MainPage.SetActive(true);
                 }
-                if (fp)
+                CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+            }
+
+            // FP camera
+            if (fp)
+            {
+                CameraTablet.transform.LookAt(2f * CameraTablet.transform.position - CameraFollower.transform.position);
+                if (!flipped)
                 {
+                    flipped = true;
+                    ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                    TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
+                    FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
+                }
+                dist = Vector3.Distance(CameraFollower.transform.position, CameraTablet.transform.position);
+                if (dist > minDist)
+                    CameraTablet.transform.position = Vector3.Lerp(CameraTablet.transform.position, CameraFollower.transform.position, fpspeed);
+            }
+
+            // TPV camera
+            if (tpv)
+            {
+                if (MainPage?.activeSelf ?? false)
+                {
+                    foreach (var mr in meshRenderers) if (mr) mr.enabled = false;
+                    MainPage.SetActive(false);
+                }
+
+                Vector3 offset = TPVMode == TPVModes.BACK ? new Vector3(0.3f, 0.1f, -1.5f) : new Vector3(0.1f, 0.3f, 2.5f);
+                targetPosition = (followheadrot ? CameraFollower.transform : TPVBodyFollower.transform).TransformPoint(offset);
+                CameraTablet.transform.position = Vector3.SmoothDamp(CameraTablet.transform.position, targetPosition, ref velocity, 0.1f);
+
+                if (TPVMode == TPVModes.BACK)
+                    CameraTablet.transform.LookAt(CameraFollower.transform.position);
+                else
                     CameraTablet.transform.LookAt(2f * CameraTablet.transform.position - CameraFollower.transform.position);
-                    if (!flipped)
-                    {
-                        flipped = true;
-                        ThirdPersonCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        TabletCameraGO.transform.Rotate(0.0f, 180f, 0.0f);
-                        FakeWebCam.transform.Rotate(-180f, 180f, 0.0f);
-                    }
-                    dist = Vector3.Distance(CameraFollower.transform.position, CameraTablet.transform.position);
-                    if (dist > minDist)
-                    {
-                        CameraTablet.transform.position = Vector3.Lerp(CameraTablet.transform.position, CameraFollower.transform.position, fpspeed);
-                    }
-                }
-                if (tpv)
+
+                if (InputManager.instance.LeftPrimaryButton)
                 {
-                    if (MainPage.active)
-                    {
-                        foreach (MeshRenderer mr in meshRenderers)
-                        {
-                            mr.enabled = false;
-                        }
-                        MainPage.active = false;
-                    }
-                    if (TPVMode == TPVModes.BACK)
-                    {
-                        if (followheadrot)
-                        {
-                            targetPosition = CameraFollower.transform.TransformPoint(new Vector3(0.3f, 0.1f, -1.5f));
-                        }
-                        else
-                        {
-                            targetPosition = TPVBodyFollower.transform.TransformPoint(new Vector3(0.3f, 0.1f, -1.5f));
-                        }
-                        CameraTablet.transform.position = Vector3.SmoothDamp(CameraTablet.transform.position, targetPosition, ref velocity, 0.1f);
-                        CameraTablet.transform.LookAt(CameraFollower.transform.position);
-                    }
-                    else if (TPVMode == TPVModes.FRONT)
-                    {
-                        if (followheadrot)
-                        {
-                            targetPosition = CameraFollower.transform.TransformPoint(new Vector3(0.1f, 0.3f, 2.5f));
-                        }
-                        else
-                        {
-                            targetPosition = TPVBodyFollower.transform.TransformPoint(new Vector3(0.1f, 0.3f, 2.5f));
-                        }
-                        CameraTablet.transform.position = Vector3.SmoothDamp(CameraTablet.transform.position, targetPosition, ref velocity, 0.1f);
-                        CameraTablet.transform.LookAt(2f * CameraTablet.transform.position - CameraFollower.transform.position);
-                    }
-                    if (InputManager.instance.LeftPrimaryButton)
-                    {
-                        CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
-                        foreach (MeshRenderer mr in meshRenderers)
-                        {
-                            mr.enabled = true;
-                        }
-                        CameraTablet.transform.parent = null;
-                        tpv = false;
-                    }
+                    CameraTablet.transform.position = Player.Instance.headCollider.transform.position + Player.Instance.headCollider.transform.forward;
+                    foreach (var mr in meshRenderers) if (mr) mr.enabled = true;
+                    CameraTablet.transform.parent = null;
+                    tpv = false;
                 }
             }
         }
+
         GameObject LoadBundle(string goname, string resourcename)
         {
             Stream str = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourcename);
             AssetBundle asb = AssetBundle.LoadFromStream(str);
-            GameObject go = Instantiate<GameObject>(asb.LoadAsset<GameObject>(goname));
+            GameObject go = Instantiate(asb.LoadAsset<GameObject>(goname));
             asb.Unload(false);
             str.Close();
             return go;
