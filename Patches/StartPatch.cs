@@ -1,6 +1,7 @@
-﻿using HarmonyLib;
+using HarmonyLib;
 using UnityEngine;
 using YizziCamModV2;
+
 namespace YizziCamModV2.Patches
 {
     [HarmonyPatch(typeof(GorillaTagger))]
@@ -9,8 +10,14 @@ namespace YizziCamModV2.Patches
     {
         private static void Postfix()
         {
-            new GameObject().AddComponent<CameraController>();
-            CameraController.Instance.YizziStart();
+            if (CameraController.Instance == null)
+            {
+                GameObject cameraGO = new GameObject("CameraController");
+                cameraGO.AddComponent<CameraController>();
+                DontDestroyOnLoad(cameraGO);
+            }
+
+            CameraController.Instance?.YizziStart();
         }
     }
 }
