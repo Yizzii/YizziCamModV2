@@ -1,36 +1,52 @@
-﻿using System;
+using System;
 using System.Reflection;
 using HarmonyLib;
 
 namespace YizziCamModV2
 {
-	public class HarmonyPatches
-	{
-		private static Harmony instance;
+    public static class HarmonyPatches
+    {
+        private static Harmony instance;
 
-		public static bool IsPatched { get; private set; }
-		public const string InstanceId = PluginInfo.GUID;
+        public static bool IsPatched { get; private set; }
+        public const string InstanceId = PluginInfo.GUID;
 
-		internal static void ApplyHarmonyPatches()
-		{
-			if (!IsPatched)
-			{
-				if (instance == null)
-				{
-					instance = new Harmony(InstanceId);
-				}
+        internal static void ApplyHarmonyPatches()
+        {
+            if (IsPatched) return;
 
-				instance.PatchAll(Assembly.GetExecutingAssembly());
-				IsPatched = true;
-			}
-		}
-		internal static void RemoveHarmonyPatches()
-		{
-			if (instance != null && IsPatched)
-			{
-				instance.UnpatchSelf();
-				IsPatched = false;
-			}
-		}
-	}
+            if (instance == null)
+            {
+                instance = new Harmony(InstanceId);
+            }
+
+            try
+            {
+                instance.PatchAll(Assembly.GetExecutingAssembly());
+                IsPatched = true;
+                UnityEngine.Debug.Log("[YizziCamModV2] Harmony patches applied successfully.");
+            }
+            catch (Exception ex)
+            {
+                UnityEngine.Debug.LogError($"[YizziCamModV2] Failed to apply Harmony patches: {ex}");
+            }
+        }
+
+        internal static void RemoveHarmonyPatches()
+        {
+            if (instance != null && IsPatched)
+            {
+                try
+                {
+                    instance.UnpatchSelf();
+                    IsPatched = false;
+                    UnityEngine.Debug.Log("[YizziCamModV2] Harmony patches removed successfully.");
+                }
+                catch (Exception ex)
+                {
+                    UnityEngine.Debug.LogError($"[YizziCamModV2] Failed to remove Harmony patches: {ex}");
+                }
+            }
+        }
+    }
 }
